@@ -1,0 +1,45 @@
+buildscript {
+    ext.kotlinVersion = '1.2.31'
+    ext.spekVersion = '1.1.5'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+group 'org.liamjd.spek.calc'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+
+    testCompile("org.jetbrains.spek:spek-api:${spekVersion}") {
+        // exclude kotlin from spek, so that we can use the newest version
+        exclude group: 'org.jetbrains.kotlin'
+    }
+
+    testRuntime("org.jetbrains.spek:spek-junit-platform-engine:${spekVersion}") {
+        // exclude junit and kotlin from the engine, so we can use our own versions
+        exclude group: 'org.junit.platform'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
